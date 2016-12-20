@@ -3,7 +3,7 @@ version: '2'
 services:
   mariadb:
     image: mariadb:10.1
-    container_name: mariadb
+    container_name: bedrock_mariadb
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: vti-sixmurs-int
@@ -14,14 +14,15 @@ services:
       - "3306:3306"
 
   fpm:
-    image: iamdb/fpm-bedrock-wordpress
-    container_name: fpm
+    # image: iamdb/fpm-bedrock-wordpress
+    build: ./fpm-wordpress
+    container_name: bedrock_fpm
     links:
       - mariadb:mariadb
     volumes:
       #- /var/www/html
       #- /mnt/docker/bedrock/data:/var/www/html
-      - /c/Users/vti745/Documents/Kitematic/htdocs/php_wp_sixmurs_int:/var/www/html
+      - ../_htdocs/php_wp_sixmurs_int:/var/www/html
       - .:/home/bedrock
     ports:
       - "9000:9000"
@@ -33,6 +34,8 @@ services:
       WP_ENV: development
       WP_HOME: http://internal.sixmurs.dev
       WP_SITEURL: http://internal.sixmurs.dev/wp
+      PHP_XDEBUG_ENABLED: 1 # Set 1 to enable.
+      XDEBUG_CONFIG: remote_host=localhost
       # uncomment below for new installations
       #ADMIN_USER: admin
       #ADMIN_PASS: admin
@@ -40,8 +43,9 @@ services:
       #SITE_TITLE: WordPress
 
   nginx:
-    image: iamdb/nginx-bedrock-wordpress
-    container_name: nginx
+    # image: iamdb/nginx-bedrock-wordpress
+    build: ./nginx-wordpress
+    container_name: bedrock_nginx
     links:
       - fpm:fpm
     volumes_from:
@@ -54,11 +58,25 @@ services:
 
   adminer:
     image: hardware/adminer
-    container_name: adminer
+    container_name: bedrock_adminer
     links:
       - mariadb:mariadb
     ports:
       - "8888:8888"
+
+  caldav:
+    volumes:
+      - ../_htdocs/caldav-api:/var/www
+      - ../_htdocs/caldav-api/conf:/etc/nginx/sites-available
+    image: igez/nginx-php7.0-fpm
+    ports:
+      - "8080:80"
+    restart: always
+    container_name: bedrock_caldav
+    environment:
+      - PUBLIC=public
+    links:
+      - mariadb
 
 volumes:
   wordpress-db:
