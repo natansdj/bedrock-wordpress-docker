@@ -1,24 +1,16 @@
 version: '2'
 
 services:
-  mariadb:
-    image: mariadb:10.1
-    container_name: bedrock_mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: vti-sixmurs-int
-    volumes:
-#      - wordpress-db:/var/lib/mysql
-      - /mnt/sda1/mysql/db:/var/lib/mysql
-    ports:
-      - "3306:3306"
 
   fpm:
     # image: iamdb/fpm-bedrock-wordpress
     build: ./fpm-wordpress
     container_name: bedrock_fpm
-    links:
-      - mariadb:mariadb
+    external_links:
+      - dev_mariadb:mariadb
+    networks:
+      - default
+      - dev_default
     volumes:
       #- /var/www/html
       #- /mnt/docker/bedrock/data:/var/www/html
@@ -51,33 +43,37 @@ services:
     volumes_from:
       - fpm
     ports:
-      - "80:80"
+      - "8000:80"
     environment:
 #      uncomment below to remove installation password
       ALLOW_INSTALL: "yes"
+      VIRTUAL_HOST: "internal.sixmurs.dev"
+      VIRTUAL_PORT: "80"
+    networks:
+      - default
+      - dev_default
 
-  adminer:
-    image: hardware/adminer
-    container_name: bedrock_adminer
-    links:
-      - mariadb:mariadb
-    ports:
-      - "8888:8888"
-
-  caldav:
-    volumes:
-      - ../_htdocs/caldav-api:/var/www
-      - ../_htdocs/caldav-api/conf:/etc/nginx/sites-available
-    image: igez/nginx-php7.0-fpm
-    ports:
-      - "8080:80"
-    restart: always
-    container_name: bedrock_caldav
-    environment:
-      - PUBLIC=public
-    links:
-      - mariadb
+#  caldav:
+#    volumes:
+#      - ../_htdocs/caldav-api:/var/www
+#      - ../_htdocs/caldav-api/conf:/etc/nginx/sites-available
+#    image: igez/nginx-php7.0-fpm
+#    ports:
+#      - "8080:80"
+#    restart: always
+#    container_name: bedrock_caldav
+#    environment:
+#      - PUBLIC=public
+#    external_links:
+#      - dev_mariadb:mariadb
+#    networks:
+#      - default
+#      - dev_default
 
 volumes:
   wordpress-db:
     driver: local
+
+networks:
+  dev_default:
+    external: true

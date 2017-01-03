@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+  mariadb:
+    image: mariadb:10.1
+    container_name: dev_mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vti-sixmurs-int
+    volumes:
+#      - wordpress-db:/var/lib/mysql
+      - /mnt/sda1/mysql/db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      VIRTUAL_HOST: "mariadb.vm"
+      VIRTUAL_PORT: "3306"
+#    network_mode: "bridge"
+
+  adminer:
+    image: hardware/adminer
+    container_name: dev_adminer
+    links:
+      - mariadb:mariadb
+    ports:
+      - "8888:8888"
+    environment:
+      VIRTUAL_HOST: "adminer.vm"
+      VIRTUAL_PORT: "80"
+#    network_mode: "bridge"
+
+#  nginx-proxy:
+#    image: jwilder/nginx-proxy:latest
+#    container_name: dev_proxy
+#    ports:
+#      - 80:80
+#      - 443:443
+#    volumes:
+#      - //var/run/docker.sock:/tmp/docker.sock:ro
+#      # - vhost.d:/etc/nginx/vhost.d:ro
+#    restart: always
+##    network_mode: "bridge"
+#    networks:
+#      - default
+#      - php_default
+#      - bedrock_default
+
+volumes:
+  wordpress-db:
+    driver: local
+
+networks:
+  default:
+#    driver: bridge
+#      external:
+#        name: bridge
+#  bedrock_default:
+#    external: true
+#  php_default:
+#    external: true

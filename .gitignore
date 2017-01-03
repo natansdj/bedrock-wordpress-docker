@@ -2,3 +2,4 @@
 .idea
 *.bak
 *.sql
+npm-debug.log
