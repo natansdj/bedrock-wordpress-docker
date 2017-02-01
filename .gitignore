@@ -3,3 +3,6 @@
 *.bak
 *.sql
 npm-debug.log
+project/*
+!.gitkeep
+/docker-compose.yml

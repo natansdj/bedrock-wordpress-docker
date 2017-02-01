@@ -1,5 +1,6 @@
 # Dockerized Wordpress using Bedrock
 
+* Based from [iamdb/bedrock-wordpress-docker](https://github.com/iamdb/bedrock-wordpress-docker) 
 * Wordpress install based on [Bedrock](https://github.com/roots/bedrock).
 * Create a fresh install or bring your own.
 * [wp-cli](https://wp-cli.org) support
@@ -17,9 +18,9 @@ It can be used/configured in a variety of ways:
 
 * You can mount your own volume and replace the entire Bedrock installation at `/var/www/html/` with your own.
 * You can just mount the `web/app` folder with your plugins, themes and uploads and let the container deal with Wordpress.
-* You can make a custom dockerized Wordpress installation by forking this repo or by using `iamdb/fpm-bedrock-wordpress` as a starting image and managing your install using composer (example below).
+* You can make a custom dockerized Wordpress installation by forking this repo or by using `natansdj/fpm-bedrock-wp` as a starting image and managing your install using composer (example below).
 
-The `nginx` and `fpm` containers are provided separately for flexibility, but there's a sample `docker-compose.yml` file that's provided which should have everything you need to get up and running quickly. They are also built automatically on Docker Hub using this repo at `iamdb/nginx-bedrock-wordpress` and `iamdb/fpm-bedrock-wordpress`.
+The `nginx` and `fpm` containers are provided separately for flexibility, but there's a sample `docker-compose.yml` file that's provided which should have everything you need to get up and running quickly. They are also built automatically on Docker Hub using this repo at `natansdj/nginx-bedrock-wp` and `natansdj/fpm-bedrock-wp`.
 
 ## docker-compose.yml
 Change the `WP_HOME` and `WP_SITEURL` variables to your values. Add an admin username, password and email and a site title as shown in the `docker-compose.yml` file to create a fresh install.
@@ -40,11 +41,11 @@ docker exec fpm wp core version
 
 ## Using as a base image
 
-The `iamdb/fpm-bedrock-wordpress` image is designed to be used as a base image as well. This makes it easy to build and rebuild containers that have everything your Wordpress installation needs, every single time.
+The `natansdj/fpm-bedrock-wp` image is designed to be used as a base image as well. This makes it easy to build and rebuild containers that have everything your Wordpress installation needs, every single time.
 
 Sample custom fpm Dockerfile:
 ```
-FROM iamdb/fpm-bedrock-wordpress
+FROM natansdj/fpm-bedrock-wp
 
 RUN su-exec www-data composer require \
 	wpackagist-plugin/akismet \

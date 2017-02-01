@@ -1,0 +1,5 @@
+!README.md
+adminer/*
+storage/*
+project/*
+./docker-compose*

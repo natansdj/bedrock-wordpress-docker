@@ -3,8 +3,8 @@ version: '2'
 services:
 
   fpm:
-    # image: iamdb/fpm-bedrock-wordpress
-    build: ./fpm-wordpress
+    image: natansdj/fpm-bedrock-wp
+    # build: ./fpm-wordpress
     container_name: elbow_fpm
     external_links:
       - dev_mariadb:mariadb
@@ -32,8 +32,8 @@ services:
       #SITE_TITLE: WordPress
 
   nginx:
-    # image: iamdb/nginx-bedrock-wordpress
-    build: ./nginx-wordpress
+    image: natansdj/nginx-bedrock-wp
+    # build: ./nginx-wordpress
     container_name: elbow_nginx
     links:
       - fpm:fpm
