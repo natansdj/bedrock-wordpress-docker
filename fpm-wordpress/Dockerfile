@@ -62,12 +62,13 @@ RUN apk add build-base autoconf && \
 	pecl install -o -f xdebug && \
 	rm -rf /tmp/pear && \
 	docker-php-ext-enable xdebug && \
-	sed -i '1 a xdebug.remote_autostart=off' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+	sed -i '1 a xdebug.remote_autostart=1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	sed -i '1 a xdebug.remote_mode=req' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	sed -i '1 a xdebug.remote_handler=dbgp' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-	sed -i '1 a xdebug.remote_connect_back=1 ' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+	sed -i '1 a xdebug.remote_connect_back=0' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	sed -i '1 a xdebug.remote_port=9000' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-	sed -i '1 a xdebug.remote_host=127.0.0.1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+	sed -i '1 a xdebug.idekey=PHPSTORM' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+	sed -i '1 a xdebug.remote_host=172.18.0.1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	sed -i '1 a xdebug.remote_enable=1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	apk del build-base && \
   rm -rf /var/cache/apk/*

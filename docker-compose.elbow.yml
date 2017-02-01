@@ -5,26 +5,26 @@ services:
   fpm:
     # image: iamdb/fpm-bedrock-wordpress
     build: ./fpm-wordpress
-    container_name: bedrock_fpm
+    container_name: elbow_fpm
     external_links:
       - dev_mariadb:mariadb
     volumes:
       #- /var/www/html
-      - ../_htdocs/php_wp_sixmurs_int:/var/www/html
+      - ../_htdocs/genstudio_elbow_wp:/var/www/html
       - .:/home/bedrock
     # ports:
     #   - "9000:9000"
     environment:
-      DB_NAME: vti-sixmurs-int
+      DB_NAME: dev_elbow_wp
       DB_USER: vti
       DB_PASSWORD: vti
       DB_HOST: mariadb
       WP_ENV: development
-      WP_HOME: http://internal.sixmurs.vm
-      WP_SITEURL: http://internal.sixmurs.vm/wp
+      WP_HOME: http://elbow-wp.genstudio.vm
+      WP_SITEURL: http://elbow-wp.genstudio.vm/wp
       PHP_XDEBUG_ENABLED: 1 # Set 1 to enable.
-      PHP_IDE_CONFIG: serverName=internal.sixmurs.vm
-      XDEBUG_CONFIG: remote_host=172.18.0.1 remote_connect_back=1 remote_autostart=1 profiler_enable_trigger=1
+      PHP_IDE_CONFIG: serverName=elbow-wp.genstudio.vm
+      XDEBUG_CONFIG: remote_host=172.18.0.1 remote_connect_back=1 remote_autostart=1 profiler_enable_trigger=1 idekey=PHPSTORM
       # uncomment below for new installations
       #ADMIN_USER: admin
       #ADMIN_PASS: admin
@@ -34,7 +34,7 @@ services:
   nginx:
     # image: iamdb/nginx-bedrock-wordpress
     build: ./nginx-wordpress
-    container_name: bedrock_nginx
+    container_name: elbow_nginx
     links:
       - fpm:fpm
     volumes_from:
@@ -44,12 +44,12 @@ services:
     environment:
 #      uncomment below to remove installation password
       ALLOW_INSTALL: "yes"
-      VIRTUAL_HOST: "internal.sixmurs.vm"
+      VIRTUAL_HOST: "elbow-wp.genstudio.vm"
       VIRTUAL_PORT: "80"
 
   # wpcli:
   #   image: tatemz/wp-cli
-  #   container_name: wpcli
+  #   container_name: elbow_cli
   #   volumes:
   #     - /home/www/wordpress:/var/www/html
   #   volumes_from:
@@ -69,22 +69,6 @@ services:
   #     WORDPRESS_DB_USER: vti
   #     WORDPRESS_DB_PASSWORD: vti
   #     WORDPRESS_TABLE_PREFIX: wp_
-
-  caldav:
-    image: igez/nginx-php7.0-fpm
-    ports:
-      - "8080:80"
-    restart: always
-    container_name: bedrock_caldav
-    volumes:
-      - ../_htdocs/php_caldav_api:/var/www
-      - ../_htdocs/php_caldav_api/conf:/etc/nginx/sites-available
-    environment:
-      - PUBLIC=public
-      - VIRTUAL_HOST="caldav.vm"
-      - VIRTUAL_PORT="80"
-    external_links:
-      - dev_mariadb:mariadb
 
   storage:
     build:

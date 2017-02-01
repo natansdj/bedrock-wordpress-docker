@@ -24,7 +24,7 @@ services:
       WP_SITEURL: http://internal.sixmurs.vm/wp
       PHP_XDEBUG_ENABLED: 1 # Set 1 to enable.
       PHP_IDE_CONFIG: serverName=internal.sixmurs.vm
-      XDEBUG_CONFIG: remote_host=172.18.0.1 remote_connect_back=1 remote_autostart=1 profiler_enable_trigger=1
+      XDEBUG_CONFIG: remote_host=172.18.0.1 remote_connect_back=1 remote_autostart=1 profiler_enable_trigger=1 idekey=PHPSTORM
       # uncomment below for new installations
       #ADMIN_USER: admin
       #ADMIN_PASS: admin
@@ -72,17 +72,15 @@ services:
 
   caldav:
     image: igez/nginx-php7.0-fpm
-    ports:
-      - "8080:80"
+    #  ports:
+    #    - "8080:80"
     restart: always
     container_name: bedrock_caldav
     volumes:
-      - ../_htdocs/php_caldav_api:/var/www
-      - ../_htdocs/php_caldav_api/conf:/etc/nginx/sites-available
+      - ../_htdocs/caldav-api:/var/www
+      - ../_htdocs/caldav-api/conf:/etc/nginx/sites-available
     environment:
       - PUBLIC=public
-      - VIRTUAL_HOST="caldav.vm"
-      - VIRTUAL_PORT="80"
     external_links:
       - dev_mariadb:mariadb
 

@@ -17,10 +17,11 @@ su-exec apk --update --no-cache add build-base autoconf
 su-exec pecl install -o -f xdebug
 su-exec rm -rf /tmp/pear
 su-exec docker-php-ext-enable xdebug
-su-exec sed -i '1 a xdebug.remote_autostart=off' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+su-exec sed -i '1 a xdebug.remote_autostart=1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 su-exec sed -i '1 a xdebug.remote_mode=req' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 su-exec sed -i '1 a xdebug.remote_handler=dbgp' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-su-exec sed -i '1 a xdebug.remote_connect_back=1 ' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+su-exec sed -i '1 a xdebug.remote_connect_back=1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 su-exec sed -i '1 a xdebug.remote_port=9000' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-su-exec sed -i '1 a xdebug.remote_host=127.0.0.1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+su-exec sed -i '1 a xdebug.idekey=PHPSTORM' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+su-exec sed -i '1 a xdebug.remote_host=172.18.0.1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 su-exec sed -i '1 a xdebug.remote_enable=1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
