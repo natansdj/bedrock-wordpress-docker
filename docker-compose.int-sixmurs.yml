@@ -8,12 +8,13 @@ services:
     container_name: bedrock_fpm
     external_links:
       - dev_mariadb:mariadb
+      - caldav
     volumes:
       #- /var/www/html
       - ../_htdocs/php_wp_sixmurs_int:/var/www/html
       - .:/home/bedrock
-    # ports:
-    #   - "9000:9000"
+    ports:
+      - "9001:9000"
     environment:
       DB_NAME: vti-sixmurs-int
       DB_USER: vti
@@ -24,7 +25,7 @@ services:
       WP_SITEURL: http://internal.sixmurs.vm/wp
       PHP_XDEBUG_ENABLED: 1 # Set 1 to enable.
       PHP_IDE_CONFIG: serverName=internal.sixmurs.vm
-      XDEBUG_CONFIG: remote_host=172.18.0.1 remote_connect_back=1 remote_autostart=1 profiler_enable_trigger=1 idekey=PHPSTORM
+      XDEBUG_CONFIG: remote_host=172.18.0.1 remote_connect_back=0 remote_autostart=1 profiler_enable=1 profiler_enable_trigger=1 idekey=PHPSTORM
       # uncomment below for new installations
       #ADMIN_USER: admin
       #ADMIN_PASS: admin
