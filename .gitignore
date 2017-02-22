@@ -4,5 +4,6 @@
 *.sql
 npm-debug.log
 project/*
+backup/*
 !.gitkeep
 /docker-compose.yml
