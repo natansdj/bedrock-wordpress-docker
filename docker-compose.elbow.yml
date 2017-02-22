@@ -70,15 +70,20 @@ services:
   #     WORDPRESS_DB_PASSWORD: vti
   #     WORDPRESS_TABLE_PREFIX: wp_
 
-  storage:
-    build:
-      context: storage/
-    volumes:
-      - /storage
+  # storage:
+  #   build:
+  #     context: storage/
+  #   volumes:
+  #     - /storage
 
 volumes:
   wordpress-db:
     driver: local
+  # storage:
+  #   driver: local
+  #   driver_opts:
+  #     device: /home/vt745/Documents/bedrock/backup
+  #     o: bind
 
 networks:
   default:
